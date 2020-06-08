@@ -1,0 +1,115 @@
+﻿<!DOCTYPE html>
+<html>
+@{
+    AjaxOptions ajaxUserSearch = new AjaxOptions()
+    {
+        UpdateTargetId = "list",
+        Url = Url.Action("AsyncQuery", "User")
+    };
+
+    AjaxOptions ajaxLinkSearch = new AjaxOptions()
+    {
+        UpdateTargetId = "list",
+        Url = Url.Action("LinksSearch", "Link")
+    };
+}
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - Админка</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+</head>
+<body>
+    <nav class="navbar navbar-default navbar-main">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="\">
+                    <img src="~/Content/img/logo.png" alt="Checkitlink">
+                </a>
+            </div>
+            <div id="navbar" class="navbar-collapse collapse">
+
+                @Html.Action("AdminLoginPartial", "User")
+
+                @if (ViewBag.Title == "Список пользователей" || ViewBag.Title == "Черный список")
+                {
+                    <div class="navbar-form navbar-right">
+                        <div class="search-wrapper">
+                            @using (Ajax.BeginForm(ajaxUserSearch))
+                            {
+                                <input type="hidden" name="title" value="@ViewBag.Title"/>
+                                <input type="text" name="filter" class="search-form form-search-input" placeholder="Search...">
+                                <button class="btn btn-default form-control" type="submit" style="background-color: white;">
+                                    <span class="fa fa-search" aria-hidden="true"></span>
+                                </button>
+                            }
+                        </div>
+                    </div>
+                }
+
+                @if (ViewBag.Title == "Список ссылок")
+                {
+                    <div class="navbar-form navbar-right">
+                        <div class="search-wrapper">
+                            @using (Ajax.BeginForm(ajaxLinkSearch))
+                            {
+                                <input type="text" name="filter" class="search-form form-search-input" placeholder="Search...">
+                                <button class="btn btn-default form-control" type="submit" style="background-color: white;">
+                                    <span class="fa fa-search" aria-hidden="true"></span>
+                                </button>
+                            }
+                        </div>
+                    </div>
+                }
+
+                <div class="row btn-toolbar">
+                    <div class="menuButtons">
+                        <a href="@Url.Action("Index", "Link")" type="button" class="btn btn-default btn-link-edit" title="Список ссылок">
+                            <img src="~/Content/img/lenta.png">
+                        </a>
+
+                        <a href="@Url.Action("SiteBlackList", "Link")" type="button" style="background-color:red" class="btn btn-default btn-link-edit" title="Черный список ресурсов">
+                            <img src="~/Content/img/lenta.png">
+                        </a>
+
+                        <a href="@Url.Action("BlackList", "User")" type="button" style="background-color:red" class="btn btn-default btn-link-remove" title="Черный список пользователей">
+                            <img src="~/Content/img/users.png">
+                        </a>
+
+                        <a href="@Url.Action("Index", "User")" type="button" class="btn btn-default btn-link-remove" title="Список пользователей">
+                            <img src="~/Content/img/users.png">
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container body-content">
+        @RenderBody()
+        <hr />
+        <footer>
+            <p>&copy; @DateTime.Now.Year - Chekitlink.com</p>
+        </footer>
+    </div>
+
+    @Scripts.Render("~/bundles/bower-jquery")
+    @Scripts.Render("~/bundles/jqueryui")
+    @Scripts.Render("~/bundles/bower-bootsrap-js")
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/ajax")
+    @RenderSection("scripts", required: false)
+</body>
+</html>
+
+@section Scripts
+{
+    <script src="~/Content/CheckitJS/BlockUserJS.js"></script>
+}

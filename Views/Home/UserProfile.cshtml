@@ -1,0 +1,198 @@
+﻿@*основное представление для страниц Личный кабинет, Избранные закладки, Общая лента публичных закладок*@
+
+@model Checkitlink.Models.ViewModels.ProfileVM
+
+@using PagedList.Mvc;
+@using PagedList;
+
+@{
+    AjaxOptions categoryLinks = new AjaxOptions()
+    {
+        UpdateTargetId = "list",
+        HttpMethod = "POST",
+        Url = Url.Action("SortLinksCategory", "Home")
+    };
+}
+
+<div class="row sections">
+    <ul class="nav nav-tabs">
+        @if (ViewBag.Title == "Личный кабинет")
+        {
+            <li role="presentation" class="active">
+                <a href="@Url.Action("UserProfile", "Home", new { favourite = "false", title = "Личный кабинет" })">
+                    <i class="fa fa-bookmark"></i> Мои закладки
+                </a>
+            </li>
+        }
+        else
+        {
+            <li role="presentation">
+                <a href="@Url.Action("UserProfile", "Home", new { favourite = "false", title = "Личный кабинет" })">
+                    <i class="fa fa-bookmark"></i> Мои закладки
+                </a>
+            </li>
+        }
+
+        @if (ViewBag.Title == "Избранные закладки")
+        {
+            <li role="presentation" class="active">
+                <a href="@Url.Action("UserProfile", "Home", new { favourite = "true", title = "Избранные закладки" })">
+                    <i class="fa fa-star"></i> Избранные закладки
+                </a>
+            </li>
+        }
+        else
+        {
+            <li role="presentation">
+                <a href="@Url.Action("UserProfile", "Home", new { favourite = "true", title = "Избранные закладки" })">
+                    <i class="fa fa-star"></i> Избранные закладки
+                </a>
+            </li>
+        }
+
+        @if (ViewBag.Title == "Пользователи")
+        {
+            <li role="presentation" class="active">
+                <a href="@Url.Action("Users", "Home", new { title = "Избранные пользователи"})">
+                    <i class="fa fa-users"></i> Избранные пользователи
+                </a>
+            </li>
+        }
+        else
+        {
+            <li role="presentation">
+                <a href="@Url.Action("Users", "Home", new { title = "Избранные пользователи"})">
+                    <i class="fa fa-users"></i> Избранные пользователи
+                </a>
+            </li>
+        }
+
+        @if (ViewBag.Title == "Общая лента публичных закладок")
+        {
+            <li role="presentation" class="active">
+                <a href="@Url.Action("UserProfile", "Home", new { favourite = "false", title = "Общая лента публичных закладок" })">
+                    <i class="fa fa-bookmark"></i> Общая лента публичных закладок
+                </a>
+            </li>
+        }
+        else
+        {
+            <li role="presentation">
+                <a href="@Url.Action("UserProfile", "Home", new { favourite = "false", title = "Общая лента публичных закладок" })">
+                    <i class="fa fa-bookmark"></i> Общая лента публичных закладок
+                </a>
+            </li>
+        }
+    </ul>
+</div>
+<div class="row main-content">
+
+    <div class="col-xs-12 col-sm-4 col-md-3 col-lg-3 sidebar">
+        @if (ViewBag.Title == "Общая лента публичных закладок")
+        {
+            <h2 class="commonData">
+                Общие данные
+            </h2>
+            <h4>
+                Всего публичных закладок<br />
+                <span id="counter" class="badge">
+                    @Model.LinkListUserProfile.Count
+                </span>
+            </h4>
+            <h4>
+                Всего пользователей<br />
+                <span id="counter" class="badge">
+                    @Model.UsersLeadList.Count
+                </span>
+            </h4>
+        }
+        else
+        {
+            <button type="button" class="btn btn-circle btn-info btn-outline btn-add" data-toggle="modal" data-target="#addCategory">
+                <i class="fa fa-plus"></i>
+                Добавить категорию
+            </button>
+            <ul class="list-group category">
+                @using (Ajax.BeginForm(categoryLinks))
+                {
+                    foreach (var item in Model.CategoryProfileList)
+                    {
+                        <li class="list-group-item">
+                            <input type="hidden" name="title" value="@ViewBag.Title" />
+                            <button name="categoryName" value="@item.CategoryName" class="btn btn-info" style="width:100%" title="@item.CategoryName">
+                                <span style="float:left">
+                                    @item.CategoryName
+                                </span>
+                                <span class="badge" style="float:right; top:0px; font-size:13px;">
+                                    @Model.AllUserLinks.Where(x => x.LinkCategory == item.CategoryName || item.CategoryName == "Все ссылки").Count()
+                                </span>
+                            </button>
+                        </li>
+                    }
+                }
+            </ul>
+        }
+    </div>
+    <div class="col-xs-12 col-sm-8 col-md-9 col-lg-9 main">
+        <div class="wrapper-large">
+            <h3 style="margin-bottom: 14px; margin-top:0;">Последние добавленные</h3>
+        </div>
+
+        @if (!Model.LinkListUserProfile.Any() && ViewBag.Title != "Избранные закладки")
+        {
+            <button class="btn btn-success" style="border-radius:15px;" type="button" data-toggle="modal" data-target="#addLink">
+                <h2 style="text-align:center; margin-top:10px;">Добавьте свою первую закладку</h2>
+            </button>
+        }
+        else
+        {
+            <div id="list" class="row d-inline-flex col p-2">
+                @{
+                    Html.RenderPartial("_UserProfilePartial", Model);
+                }
+            </div>
+            @Html.PagedListPager((IPagedList)ViewBag.linkOnPage, page => Url.Action("UserProfile", new { page }))
+        }
+    </div>
+</div>
+
+<div class="modal" id="addLink" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Добавить ссылку</h4>
+            </div>
+            @{
+                Html.RenderPartial("_AddLinkPartial", Model);
+            }
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="addCategory" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Добавить категорию</h4>
+            </div>
+            @using (Html.BeginForm("CreateNewCategory", "Home"))
+            {
+                <div class="modal-body">
+                    @Html.TextBox("newCategory", "", new { @class = "form-control" })
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-success">Сохранить</button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Закрыть</button>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@section Scripts
+{
+    <script src="~/Content/CheckitJS/AddLinkProcessJS.js"></script>
+    <script src="~/Content/CheckitJS/DeleteLinkJS.js"></script>
+}

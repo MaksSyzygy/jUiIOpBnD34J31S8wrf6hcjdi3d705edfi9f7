@@ -1,0 +1,108 @@
+﻿@model Checkitlink.Models.ViewModels.ProfileVM
+
+@{
+    ViewBag.Title = "Редактор категорий";
+}
+
+@if (TempData["OK"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["OK"]
+    </div>
+}
+
+<div class="container">
+    <div class="row">
+        <table class="table table-striped" style="width:60%" align="center">
+            <tbody>
+                <tr>
+                    <th scope="row">
+                        @Html.DisplayNameFor(model => model.UserInfo.Login)
+                    </th>
+                    <td>
+                        @Html.DisplayFor(model => model.UserInfo.Login)
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row">
+                        @Html.DisplayNameFor(model => model.UserInfo.Email)
+                    </th>
+                    <td>
+                        @Html.DisplayFor(model => model.UserInfo.Email)
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row">
+                        @Html.LabelFor(model => model.UserInfo.AvatarName)
+                    </th>
+                    <td class="avatarUser" style="text-align:left;">
+                        @if (Model.UserInfo.AvatarName != null)
+                        {
+                            <img id="imgPreview" src="/Avatars/Uploads/UserAvatars/@Model.UserInfo.UserId/@Model.UserInfo.AvatarName" />
+                        }
+                        else
+                        {
+                            <img id="imgPreview" src="~/Content/img/no-image.png" />
+                        }
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row">
+                        Мои категории
+                    </th>
+                    <td>
+                        @foreach (var item in Model.CategoryProfileList)
+                        {
+                            <div class="catButton">
+                                @using (Html.BeginForm("RenameCategory", "Home"))
+                                {
+                                    @Html.AntiForgeryToken()
+                                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                                    @Html.HiddenFor(model => model.UserInfo.UserId)
+                                    @Html.HiddenFor(model => model.UserInfo.Login)
+                                    @Html.HiddenFor(model => model.UserInfo.Email)
+                                    @Html.HiddenFor(model => model.UserInfo.AvatarName)
+
+                                    <span>
+                                        @item.CategoryName
+                                    </span>
+                                    <span class="catNewName">
+                                        <input type="text" name="catName" placeholder="Новое имя..." title="Введите новое имя категории" />
+                                    </span>
+                                    <button class="renameCat" type="submit" name="catId" value="@item.CategoryId" title="Переименовать">
+                                        <i class="fa fa-pencil"></i>
+                                    </button>
+                                }
+                                @using (Html.BeginForm("DeleteCategory", "Home"))
+                                {
+                                    @Html.AntiForgeryToken()
+                                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                                    @Html.HiddenFor(model => model.UserInfo.UserId)
+                                    @Html.HiddenFor(model => model.UserInfo.Login)
+                                    @Html.HiddenFor(model => model.UserInfo.Email)
+                                    @Html.HiddenFor(model => model.UserInfo.AvatarName)
+
+                                    <button type="submit" name="deleteCatId" value="@item.CategoryId" title="Удалить категорию" class="btn-danger deleteCat">
+                                        <i class="fa fa-times"></i>
+                                    </button>
+                                }
+                            </div>
+                        }
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="form-group">
+            <div style="text-align:center">
+                @Html.ActionLink("Назад", "Index", "", new { @class = "btn btn-primary" })
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts
+{
+    <script src="~/Content/CheckitJS/DeleteCatJS.js"></script>
+}

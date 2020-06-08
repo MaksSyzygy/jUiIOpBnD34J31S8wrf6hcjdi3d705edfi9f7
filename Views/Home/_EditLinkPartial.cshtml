@@ -1,0 +1,38 @@
+﻿@*Редактирование закладки*@
+
+@model Checkitlink.Models.ViewModels.ProfileVM
+
+@using (Html.BeginForm("EditLink", "Home"))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="modal-body" style="padding-top:0px;">
+
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.UserLink.LinkID)
+        @Html.HiddenFor(model => model.UserLink.LinkAddress)
+
+        @Html.LabelFor(model => model.UserLink.LinkName, htmlAttributes: new { @class = "control-label addLinkLabel" })
+        <span style="padding-left:5px;" title="Имя по умолчанию будет взято с сайта"><span class="btn-success addLinkTitle">?</span></span>
+        @Html.EditorFor(model => model.UserLink.LinkName, new { htmlAttributes = new { @class = "form-control" } })
+        @Html.ValidationMessageFor(model => model.UserLink.LinkName, "", new { @class = "text-danger" })
+        <br />
+
+        @Html.LabelFor(model => model.UserLink.LinkCategoryId, htmlAttributes: new { @class = "control-label addLinkLabel" })
+        <br />
+        @Html.DropDownListFor(model => model.UserLink.LinkCategoryId, Model.CategoryList, "Категория закладки", new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.UserLink.LinkCategoryId, "", new { @class = "text-danger" })
+        <br />
+
+        @Html.LabelFor(model => model.UserLink.LinkDescription, htmlAttributes: new { @class = "control-label" })
+        <span style="padding-left:5px;" title="Описание на Ваше усмотрение и для Вашего удобства"><span class="btn-success addLinkTitle">?</span></span>
+        @Html.EditorFor(model => model.UserLink.LinkDescription, new { htmlAttributes = new { placeholder = "Необязательно", @class = "form-control" } })
+        @Html.ValidationMessageFor(model => model.UserLink.LinkDescription, "", new { @class = "text-danger" })
+        <br />
+
+    </div>
+    <div class="modal-footer">
+        <button type="submit" class="btn btn-success">Сохранить</button>
+        <button type="button" class="btn btn-danger" data-dismiss="modal">Закрыть</button>
+    </div>
+}

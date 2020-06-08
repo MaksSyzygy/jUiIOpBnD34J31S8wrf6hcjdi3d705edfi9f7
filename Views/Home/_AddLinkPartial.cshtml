@@ -1,0 +1,45 @@
+﻿@*добавление новой закладки*@
+
+@model Checkitlink.Models.ViewModels.ProfileVM
+
+@using (Html.BeginForm("AddLink", "Home"))
+{
+    <div class="modal-body" style="padding-top:0px;">
+
+        @Html.AntiForgeryToken()
+
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+        @Html.LabelFor(model => model.UserLink.LinkName, htmlAttributes: new { @class = "control-label addLinkLabel" })
+        <span style="padding-left:5px;" title="Имя по умолчанию будет взято с сайта"><span class="btn-success addLinkTitle">?</span></span>
+        @Html.EditorFor(model => model.UserLink.LinkName, new { htmlAttributes = new { @class = "form-control" } })
+        @Html.ValidationMessageFor(model => model.UserLink.LinkName, "", new { @class = "text-danger" })
+
+        @Html.LabelFor(model => model.UserLink.LinkAddress, htmlAttributes: new { @class = "control-label addLinkLabel" })
+        @Html.EditorFor(model => model.UserLink.LinkAddress, new { htmlAttributes = new { @class = "form-control" } })
+        @Html.ValidationMessageFor(model => model.UserLink.LinkAddress, "", new { @class = "text-danger" })
+        <br />
+
+        @Html.LabelFor(model => model.UserLink.LinkCategoryId, htmlAttributes: new { @class = "control-label addLinkLabel" })
+        <br />
+        @Html.DropDownListFor(model => model.UserLink.LinkCategoryId, Model.CategoryList, "Категория закладки", new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.UserLink.LinkCategoryId, "", new { @class = "text-danger" })
+        <br />
+
+        @Html.LabelFor(model => model.UserLink.LinkDescription, htmlAttributes: new { @class = "control-label" })
+        <span style="padding-left:5px;" title="Описание на Ваше усмотрение и для Вашего удобства"><span class="btn-success addLinkTitle">?</span></span>
+        @Html.EditorFor(model => model.UserLink.LinkDescription, new { htmlAttributes = new { placeholder = "Необязательно", @class = "form-control" } })
+        @Html.ValidationMessageFor(model => model.UserLink.LinkDescription, "", new { @class = "text-danger" })
+        <br />
+
+    </div>
+    <div class="modal-footer">
+        <span class="ajax-text">
+            <span class='alert alert-success'>Создается закладка и скриншот, подождите...</span>
+            <img src="~/Content/img/loading.gif" height="30" />
+        </span>
+        <button id="saveLink" type="submit" class="btn btn-success saveButtonLink">Сохранить</button>
+        <button type="button" class="btn btn-danger closeButton" data-dismiss="modal">Закрыть</button>
+    </div>
+}
+

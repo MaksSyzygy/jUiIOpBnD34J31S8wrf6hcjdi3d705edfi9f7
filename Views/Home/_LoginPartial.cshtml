@@ -1,0 +1,27 @@
+﻿@*частичное представление аватаркой и логином в углу экрана*@
+
+@model Checkitlink.Models.ViewModels.LoginPartialVM
+
+<ul class="nav navbar-nav navbar-right">
+    <li class="dropdown dropdown-user">
+        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+            @if (Model.Avatar == null)
+            {
+                <img src="~/Content/img/no-image.png" alt="..." class="img-circle hidden-xs">@Model.Login <span class="caret"></span>
+            }
+            else
+            {
+                <img src="~/Avatars/Uploads/UserAvatars/@Model.UserId/@Model.Avatar" alt="..." class="img-circle hidden-xs">@Model.Login <span class="caret"></span>
+            }
+        </a>
+        <ul class="dropdown-menu">
+            <li>
+                <a href="/home/UserDetails">Мой профиль</a>
+            </li>
+            <li role="separator" class="divider"></li>
+            <li>
+                <a href="/home/LogOut">Выход</a>
+            </li>
+        </ul>
+    </li>
+</ul>

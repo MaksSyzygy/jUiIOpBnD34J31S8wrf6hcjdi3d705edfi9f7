@@ -1,0 +1,52 @@
+﻿@model Checkitlink.Models.ViewModels.ProfileVM
+
+@using PagedList.Mvc;
+@using PagedList;
+
+@if (!Model.ListBlackListUsersVM.Any())
+{
+    <h2>Заблокированных пользователей нет</h2>
+}
+else if (!Model.UsersList.Any())
+{
+    <h2>Не найдено</h2>
+    @Html.ActionLink("Назад", "BlackList", null, new { @class = "btn btn-success"})
+}
+else
+{
+    <table class="table">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.BlackListUserVM.Login)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.BlackListUserVM.Email)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.BlackListUserVM.Reason)
+            </th>
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model.ListBlackListUsersVM)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Login)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Email)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Reason)
+                </td>
+                <td>
+                    @Html.ActionLink("Разблокировать", "Unblock", new { id = item.Id, userId = item.UserId }, new { @class = "btn btn-success" })
+                </td>
+            </tr>
+        }
+
+    </table>
+
+    @Html.PagedListPager((IPagedList)ViewBag.usersOnPage, page => Url.Action("Index", new { page }))
+}

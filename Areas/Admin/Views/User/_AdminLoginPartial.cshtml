@@ -1,0 +1,18 @@
+﻿@model Checkitlink.Models.ViewModels.LoginPartialVM
+
+<ul class="nav navbar-nav navbar-right">
+    <li class="dropdown dropdown-user">
+        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+            <img src="~/Avatars/Uploads/UserAvatars/@Model.UserId/@Model.Avatar" alt="..." class="img-circle hidden-xs">@Model.Login <span class="caret"></span>
+        </a>
+        <ul class="dropdown-menu">
+            <li>
+                <a href="~/admin/user/AdminDetails">Мой профиль</a>
+            </li>
+            <li role="separator" class="divider"></li>
+            <li>
+                <a href="/home/LogOut">Выход</a>
+            </li>
+        </ul>
+    </li>
+</ul>

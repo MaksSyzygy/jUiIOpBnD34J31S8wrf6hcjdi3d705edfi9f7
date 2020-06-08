@@ -1,0 +1,53 @@
+﻿@*форма входа на сайт*@
+
+@model Checkitlink.Models.ViewModels.ProfileVM
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="modal-body loginBody">
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="col-lg-12 col-md-12 col-sm-12">
+            @Html.LabelFor(model => model.LoginVM.UserName, htmlAttributes: new { @class = "control-label" })
+            <div class="loginInput">
+                @Html.EditorFor(model => model.LoginVM.UserName, new { @class = "login-form" })
+                @Html.ValidationMessageFor(model => model.LoginVM.UserName, "", new { @class = "text-danger" })
+                @Html.ValidationMessage("emptyField", new { @class = "text-danger" })
+                @Html.ValidationMessage("entryError", new { @class = "text-danger" })
+                @Html.ValidationMessage("ban", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="col-lg-12 col-md-12 col-sm-12">
+            @Html.LabelFor(model => model.LoginVM.Password, htmlAttributes: new { @class = "control-label" })
+            <div class="passwordInput">
+                @Html.PasswordFor(model => model.LoginVM.Password, new { @class = "login-form" })
+                @Html.ValidationMessageFor(model => model.LoginVM.Password, "", new { @class = "text-danger" })
+                @Html.ValidationMessage("emptyField", new { @class = "text-danger" })
+                @Html.ValidationMessage("entryError", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="col-lg-12 col-md-12 col-sm-12">
+            @Html.LabelFor(model => model.LoginVM.RememberMy, htmlAttributes: new { @class = "control-label" })
+            <div class="">
+                <div class="checkbox">
+                    @Html.EditorFor(model => model.LoginVM.RememberMy)
+                    @Html.ValidationMessageFor(model => model.LoginVM.RememberMy, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="submit" class="btn btn-success">Войти</button>
+        @if (ViewBag.Title == "Ошибка входа")
+        {
+            @Html.ActionLink("Закрыть", "Landing", null, new { type = "button", @class = "btn btn-danger closeWindow" })
+        }
+        else
+        {
+            <button type="button" class="btn btn-danger closeWindow" data-dismiss="modal">Закрыть</button>
+        }
+    </div>
+}

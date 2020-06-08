@@ -1,0 +1,134 @@
+﻿@*основное представлние для страницы Избранные пользователи*@
+
+@model Checkitlink.Models.ViewModels.ProfileVM
+
+@using PagedList.Mvc;
+@using PagedList;
+
+@{
+    ViewBag.Title = "Избранные пользователи";
+
+    AjaxOptions users = new AjaxOptions()
+    {
+        UpdateTargetId = "list",
+        HttpMethod = "POST",
+        Url = Url.Action("Users", "Home")
+    };
+}
+
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger">
+        @TempData["Error"]
+    </div>
+}
+
+<div class="row sections">
+    <ul class="nav nav-tabs">
+        <li role="presentation">
+            <a href="@Url.Action("UserProfile", "Home", new { favourite = "false", title = "Личный кабинет" })">
+                <i class="fa fa-bookmark"></i> Мои закладки
+            </a>
+        </li>
+
+        <li role="presentation">
+            <a href="@Url.Action("UserProfile", "Home", new { favourite = "true", title = "Избранные закладки" })">
+                <i class="fa fa-star"></i> Избранные закладки
+            </a>
+        </li>
+
+        @if (ViewBag.Title == "Избранные пользователи")
+        {
+            <li role="presentation" class="active">
+                <a href="@Url.Action("Users", "Home", new { title = "Избранные пользователи"})">
+                    <i class="fa fa-users"></i> Избранные пользователи
+                </a>
+            </li>
+        }
+        else
+        {
+            <li role="presentation">
+                <a href="@Url.Action("Users", "Home", new { title = "Избранные пользователи"})">
+                    <i class="fa fa-users"></i> Избранные пользователи
+                </a>
+            </li>
+        }
+
+        <li role="presentation">
+            <a href="@Url.Action("UserProfile", "Home", new { favourite = "false", title = "Общая лента публичных закладок"})">
+                <i class="fa fa-newspaper-o"></i> Общая лента публичных закладок
+            </a>
+        </li>
+    </ul>
+</div>
+<div class="row main-content">
+
+    <div class="col-xs-12 col-sm-4 col-md-3 col-lg-3 sidebar">
+        <ul class="list-group category">
+            @using (Ajax.BeginForm(users))
+            {
+                <li class="list-group-item">
+                    <input type="hidden" name="title" value="@ViewBag.Title" />
+                    <button name="choiceUserListButton" value="Избранные пользователи" class="btn btn-info" style="width:100%;">
+                        <span style="float:left">
+                            Избранные пользователи
+                        </span>
+                    </button>
+                </li>
+                <li class="list-group-item">
+                    <input type="hidden" name="title" value="@ViewBag.Title" />
+                    <button name="choiceUserListButton" value="Подписаны на меня" class="btn btn-info" style="width:100%;">
+                        <span style="float:left">
+                            Подписаны на меня
+                        </span>
+                    </button>
+                </li>
+                <li class="list-group-item">
+                    <input type="hidden" name="title" value="@ViewBag.Title" />
+                    <button name="choiceUserListButton" value="Закладки избранных пользователей" class="btn btn-info" style="width:100%;">
+                        <span style="float:left">
+                            Закладки избранных пользователей
+                        </span>
+                    </button>
+                </li>
+                <li class="list-group-item">
+                    <input type="hidden" name="title" value="@ViewBag.Title" />
+                    <button name="choiceUserListButton" value="Все пользователи" class="btn btn-info" style="width:100%;">
+                        <span style="float:left">
+                            Все пользователи
+                        </span>
+                    </button>
+                </li>
+            }
+        </ul>
+    </div>
+    <div class="col-xs-12 col-sm-8 col-md-9 col-lg-9 main">
+        <div id="list">
+            @{
+                Html.RenderPartial("_UsersPartial", Model);
+            }
+        </div>
+        @Html.PagedListPager((IPagedList)ViewBag.usersOnPage, page => Url.Action("Users", new { page }))
+    </div>
+</div>
+
+<div class="modal" id="addLink" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Добавить ссылку</h4>
+            </div>
+            @{
+                Html.RenderPartial("_AddLinkPartial", Model);
+            }
+        </div>
+    </div>
+</div>
+
+@section Scripts
+{
+    <script src="~/Content/CheckitJS/DeleteLinkJS.js"></script>
+    <script src="~/Content/CheckitJS/subscribeJS.js"></script>
+    <script src="~/Content/CheckitJS/unsubscribeJS.js"></script>
+}

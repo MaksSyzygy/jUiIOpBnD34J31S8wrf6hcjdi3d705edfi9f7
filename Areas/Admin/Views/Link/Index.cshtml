@@ -1,0 +1,23 @@
+﻿@model Checkitlink.Models.ViewModels.ProfileVM
+
+@{
+    ViewBag.Title = "Список ссылок";
+}
+
+@if (TempData["OK"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["OK"]
+    </div>
+}
+
+<div id="list">
+    @{ 
+        Html.RenderPartial("_AllLinksPartial", Model);
+    }
+</div>
+
+@section Scripts
+{
+    <script src="~/Content/CheckitJS/DeleteLinkJS.js"></script>
+}

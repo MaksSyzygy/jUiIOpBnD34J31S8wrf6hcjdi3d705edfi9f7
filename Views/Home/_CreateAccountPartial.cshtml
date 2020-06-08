@@ -1,0 +1,70 @@
+﻿@*Создание нового профиля*@
+
+@model Checkitlink.Models.ViewModels.ProfileVM
+
+@using (Html.BeginForm("CreateAccount", "Home", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="modal-body loginBody">
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="col-lg-12 col-md-12 col-sm-12">
+            @Html.LabelFor(model => model.UserInfo.Login, htmlAttributes: new { @class = "control-label" })
+            <div class="loginInput">
+                @Html.EditorFor(model => model.UserInfo.Login, new { @class = "login-form" })
+                @Html.ValidationMessage("loginExist", new { @class = "text-danger" })
+                @Html.ValidationMessageFor(model => model.UserInfo.Login, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="col-lg-12 col-md-12 col-sm-12">
+            @Html.LabelFor(model => model.UserInfo.Email, htmlAttributes: new { @class = "control-label" })
+            <div class="loginInput">
+                @Html.EditorFor(model => model.UserInfo.Email)
+                @Html.ValidationMessage("emailExist", new { @class = "text-danger" })
+                @Html.ValidationMessageFor(model => model.UserInfo.Email, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="col-lg-12 col-md-12 col-sm-12">
+            @Html.LabelFor(model => model.UserInfo.Password, htmlAttributes: new { @class = "control-label" })
+            <div class="passwordInput">
+                @Html.PasswordFor(model => model.UserInfo.Password, new { @class = "login-form" })
+                @Html.ValidationMessageFor(model => model.UserInfo.Password, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="col-lg-12 col-md-12 col-sm-12">
+            @Html.LabelFor(model => model.UserInfo.ConfirmPassword, htmlAttributes: new { @class = "control-label" })
+            <div class="passwordInput">
+                @Html.PasswordFor(model => model.UserInfo.ConfirmPassword, new { @class = "login-form" })
+                @Html.ValidationMessageFor(model => model.UserInfo.ConfirmPassword, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="col-lg-12 col-md-12 col-sm-12">
+            <div>
+                Ваш аватар
+            </div>
+            <div class="passwordInput">
+                <img id="imgPreview" src="~/Content/img/no-image.png" style="margin-bottom: 15px;margin-top: 15px;" />
+                <div>
+                    <input class="inputImage" type="file" , name="file" id="imageUpload" />
+                    <label for="imageUpload">Выбрать аватар</label>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div class="modal-footer">
+        <button type="submit" class="btn btn-success">Регистрация</button>
+        @if (ViewBag.Title == "Ошибка регистрации")
+        {
+            @Html.ActionLink("Закрыть", "Landing", null, new { type = "button", @class = "btn btn-danger closeWindow" })
+        }
+        else
+        {
+            <button type="button" class="btn btn-danger closeWindow" data-dismiss="modal">Закрыть</button>
+        }
+    </div>
+}

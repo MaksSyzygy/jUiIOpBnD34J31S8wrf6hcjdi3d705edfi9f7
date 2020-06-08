@@ -1,0 +1,86 @@
+﻿@model Checkitlink.Models.ViewModels.LinkVM
+
+@{
+    ViewBag.Title = "Редактировать закладку";
+}
+
+@using (Html.BeginForm("EditUserLink", "Link"))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    @Html.HiddenFor(model => model.LinkID)
+    @Html.HiddenFor(model => model.LinkAddress)
+
+    <div class="container">
+        <div class="row">
+            <table class="table table-striped" style="width:60%" align="center">
+                <tbody>
+                    <tr>
+                        <th scope="row">@Html.DisplayNameFor(model => model.LinkName)</th>
+                        <td>
+                            @Html.EditorFor(model => model.LinkName, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.LinkName, "", new { @class = "text-danger" })
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Адрес закладки</th>
+                        <td>
+                            <a href="@Html.DisplayFor(model => model.LinkAddress)" target="_blank" style="text-decoration:none" title="Перейти">
+                                @Html.DisplayFor(model => model.LinkAddress)
+                            </a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row">@Html.DisplayNameFor(model => model.LinkPicture)</th>
+                        <td>
+                            <img class="imgCardLink" src="/Screenshots/Uploads/LinkAvatars/@Model.LinkPicture.Substring(0, Model.LinkPicture.IndexOf('.'))/@Model.LinkPicture">
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row">@Html.DisplayNameFor(model => model.LinkCategory)</th>
+                        <td>@Html.DisplayFor(model => model.LinkCategory)</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Статус</th>
+                        <td>
+                            @if (Model.PublicStatus == true)
+                            {
+                                <span>Закладка в общем доступе. Клик для скрытия закладки</span>
+                                @Html.EditorFor(model => model.PublicStatus, new { htmlAttributes = new { title = "Скрыть закладку из общего доступа" } })
+                            }
+                            else
+                            {
+                                <span>Скрытая закладка</span>
+                            }
+                            @Html.ValidationMessageFor(model => model.PublicStatus, "", new { @class = "text-danger" })
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row">@Html.DisplayNameFor(model => model.CreatedAt)</th>
+                        <td>@Html.DisplayFor(model => model.CreatedAt)</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">@Html.DisplayNameFor(model => model.LinkDescription)</th>
+                        <td>
+                            @Html.EditorFor(model => model.LinkDescription, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.LinkDescription, "", new { @class = "text-danger" })
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row">@Html.DisplayNameFor(model => model.UserAuthor)</th>
+                        <td>
+                            @Html.DisplayFor(model => model.UserAuthor)
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Действия</th>
+                        <td>
+                            <button type="submit" class="btn btn-success" style="margin-right:10px;">Сохранить</button>
+                            @Html.ActionLink("К списку закладок", "Index", null, new { @class = "btn btn-primary" })
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+}

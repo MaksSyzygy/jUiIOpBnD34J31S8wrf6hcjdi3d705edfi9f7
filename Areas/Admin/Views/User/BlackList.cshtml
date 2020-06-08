@@ -1,0 +1,13 @@
+﻿@model Checkitlink.Models.ViewModels.ProfileVM
+
+@{
+    ViewBag.Title = "Черный список";
+}
+
+<h2>Черный список</h2>
+
+<div id="list">
+    @{ 
+        Html.RenderPartial("_BlackListPartial", Model);
+    }
+</div>

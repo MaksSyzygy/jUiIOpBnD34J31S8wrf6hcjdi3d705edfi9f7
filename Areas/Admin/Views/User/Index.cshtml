@@ -1,0 +1,84 @@
+﻿@model Checkitlink.Models.ViewModels.ProfileVM
+
+@{
+    ViewBag.Title = "Список пользователей";
+
+    AjaxOptions ajaxSort = new AjaxOptions()
+    {
+        UpdateTargetId = "list",
+        Url = Url.Action("AsyncQuery", "User")
+    };
+}
+
+<h3 style="text-align:center; margin-top:0;">Список пользователей</h3>
+
+@if (TempData["OK"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["OK"]
+    </div>
+}
+
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger">
+        @TempData["Error"]
+    </div>
+}
+
+<div class="row">
+    <div class="btn-group btn-group col-sm-12 sortForm" style="margin-bottom:15px;">
+        @using (Ajax.BeginForm(ajaxSort))
+        {
+            <ul class="navbar-nav userDropdown btn-group btn btn-info" style="margin-right: 15px; border-radius: 15px;">
+                <li class="nav-item dropdown">
+                    <a class="dropdown-toggle userDropdown" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Сортировать
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                        <li class="dropdown-submenu">
+                            <a class="dropdown-item dropdown-toggle" data-toggle="dropdown" href="#">Роль</a>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <button name="sort" value="user_admin">Админ</button>
+                                </li>
+                                <li>
+                                    <button name="sort" value="user_user">Пользователь</button>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="dropdown-submenu">
+                            <a class="dropdown-item dropdown-toggle" data-toggle="dropdown" href="#">Кол-ву ссылок</a>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <button class="dropdown-item" name="sort" value="linksCount_asc">Возрастанию</button>
+                                </li>
+                                <li>
+                                    <button class="dropdown-item" name="sort" value="linksCount_desc">Убыванию</button>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        }
+        <div class="createAdmin btn-group">
+            @Html.ActionLink("Создать админа", "CreateAdminUser", "", new { @class = "btn btn-success" })
+        </div>
+        <div class="createAdmin btn-group">
+            @Html.ActionLink("Назначить админа", "AssignAdminUser", "", new { @class = "btn btn-success" })
+        </div>
+    </div>
+</div>
+
+<div id="list">
+    @{
+        Html.RenderPartial("_UsersQueryPartial", Model);
+    }
+</div>
+
+@section Scripts
+{
+    <script src="~/Content/CheckitJS/BlockUserJS.js"></script>
+    <script src="~/Content/CheckitJS/DeleteUserJS.js"></script>
+}

@@ -1,0 +1,55 @@
+﻿@model Checkitlink.Models.ViewModels.ProfileVM
+
+@using PagedList.Mvc;
+@using PagedList;
+
+@if (!Model.AllLinks.Any())
+{
+    <h2>Закладок не обнаружено</h2>
+    @Html.ActionLink("Назад", "Index", "Link", null, new { @class = "btn btn-success" })
+}
+else
+{
+    <div class="d-table">
+        <div class="d-tr">
+            <div class="d-td">
+                Имя ссылки
+            </div>
+            <div class="d-td">
+                Категория
+            </div>
+            <div class="d-td">
+                Дата
+            </div>
+            <div class="d-td">
+                Автор
+            </div>
+            <div class="d-td">
+                Действия
+            </div>
+        </div>
+        @foreach (var item in Model.AllLinks)
+        {
+            <div class="d-tr">
+                <div class="d-td">
+                    @Html.DisplayFor(modelItem => item.LinkName)
+                </div>
+                <div class="d-td">
+                    @Html.DisplayFor(modelItem => item.LinkCategory)
+                </div>
+                <div class="d-td">
+                    @Html.DisplayFor(modelItem => item.CreatedAt)
+                </div>
+                <div class="d-td text-success">
+                    @Html.DisplayFor(modelItem => item.UserAuthor)
+                </div>
+                <div class="d-td linkInfoAdminAreaButtons">
+                    @Html.ActionLink("Инфо", "LinkInfo", new { id = item.LinkID }, new { @class = "btn btn-info", target = "_blank" })
+                    @Html.ActionLink("Удалить", "DeleteLink", new { id = item.LinkID }, new { @class = "btn btn-danger delete" })
+                </div>
+            </div>
+        }
+    </div>
+}
+
+@Html.PagedListPager((IPagedList)ViewBag.linksOnPage, page => Url.Action("Index", "Link", new { page }))

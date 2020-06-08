@@ -1,0 +1,63 @@
+﻿@model Checkitlink.Models.ViewModels.ProfileVM
+
+@{
+    ViewBag.Title = "Стоп-лист ресурсов";
+}
+
+@if (TempData["OK"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["OK"]
+    </div>
+}
+
+<div class="siteBanList">
+    <h3>Список стоп-слов ресурсов с которых закладку нельзя добавить в общий доступ</h3>
+</div>
+
+<div class="container">
+    <div class="row">
+        <table class="table table-striped" style="width:35%; text-align:center" align="center">
+            <tbody>
+                @foreach (var item in Model.BannedSiteVM)
+                {
+                    <tr>
+                        <th scope="row">
+                            @item.SiteId
+                        </th>
+                        <td>
+                            @item.SiteLink
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <div class="row">
+        <div style="text-align: center;">
+            <button class="btn btn-danger" data-toggle="modal" data-target="#addBlackSite">Добавить контрольное слово</button>
+            @Html.ActionLink("Назад", "Index", null, new { @class = "btn btn-success" })
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="addBlackSite" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Добавить стоп-слово</h4>
+            </div>
+            @using (Html.BeginForm("AddBlackListSite", "Link"))
+            {
+                <div class="modal-body">
+                    @Html.TextBox("banWord", "", new { @class = "form-control" })
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-success">Добавить</button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Закрыть</button>
+                </div>
+            }
+        </div>
+    </div>
+</div>

@@ -1,0 +1,87 @@
+﻿@model Checkitlink.Models.ViewModels.ProfileVM
+
+@using PagedList.Mvc;
+@using PagedList;
+
+@if (!Model.UsersList.Any())
+{
+    <h2>Пользователей не обнаружено</h2>
+    @Html.ActionLink("Назад", "Index", null, new { @class = "btn btn-success" })
+}
+else
+{
+    <div class="d-table">
+        <div class="d-tr">
+            <div class="d-td">
+                Логин
+            </div>
+            <div class="d-td">
+                Email
+            </div>
+            <div class="d-td">
+                Кол-во ссылок
+            </div>
+            <div class="d-td">
+                Роль
+            </div>
+            <div class="d-td">
+                Действия
+            </div>
+        </div>
+        @foreach (var item in Model.UsersList)
+        {
+            <div class="d-tr">
+                <div class="d-td">
+                    @Html.DisplayFor(modelItem => item.Login)
+                </div>
+                <div class="d-td">
+                    @Html.DisplayFor(modelItem => item.Email)
+                </div>
+                <div class="d-td">
+                    @Html.DisplayFor(modelItem => item.LinksCount)
+                </div>
+                <div class="d-td">
+                    @Html.DisplayFor(modelItem => item.Role)
+                </div>
+                <div class="d-td">
+                    @Html.ActionLink("Инфо", "InfoUser", new { id = item.UserId }, new { @class = "btn btn-info" }) |
+                    @Html.ActionLink("Редактировать", "EditUser", new { id = item.UserId }, new { @class = "btn btn-primary" }) |
+                    @if (@item.Role == "Админ")
+                    {
+                        <span title="Нельзя заблокировать администратора">
+                            @Html.ActionLink("Заблокировать", "BanUser", new { id = item.UserId }, new { @class = "btn btn-warning disabled" })
+                        </span>
+                        string slash = " | ";
+                        @slash
+                        <span title="Нельзя удалить администратора">
+                            @Html.ActionLink("Удалить", "DeleteUser", new { id = item.UserId }, new { @class = "btn btn-danger disabled" })
+                        </span>
+                    }
+                    else
+                    {
+                        <a href="@Url.Action("BanUser", "User", new { id = item.UserId })" class="btn btn-warning" data-toggle="modal" data-target="#banUser_@item.UserId">Заблокировать</a>
+                        string slash = " | ";
+                        @slash
+                        @Html.ActionLink("Удалить", "DeleteUser", new { id = item.UserId }, new { @class = "btn btn-danger delete" })
+                    }
+                </div>
+
+                <div class="modal editLinkWindow" id="banUser_@item.UserId" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                <h4 class="modal-title" id="myModalLabel">Блокировка пользователя</h4>
+                            </div>
+                            @{
+                                Html.RenderPartial("_AddBlackList", Model);
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}
+
+@Html.PagedListPager((IPagedList)ViewBag.usersOnPage, page => Url.Action("Index", new { page }))

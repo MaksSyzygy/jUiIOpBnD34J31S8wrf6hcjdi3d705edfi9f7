@@ -1,0 +1,82 @@
+﻿@model Checkitlink.Models.ViewModels.ProfileVM
+
+@{
+    ViewBag.Title = "Профиль пользователя";
+}
+
+<h3 style="text-align:center; margin-top:0;">Профиль: @Model.UserInfo.Login</h3>
+
+<div class="container">
+    <div class="row">
+        <table class="table table-striped" style="width:60%" align="center">
+            <tbody>
+                <tr>
+                    <th scope="row">@Html.DisplayNameFor(model => model.UserInfo.AvatarName)</th>
+                    <td class="avatarUser">
+                        @if (Model.UserInfo.AvatarName == null)
+                        {
+                            <img src="~/Content/img/no-image.png" />
+                        }
+                        else
+                        {
+                            <img src="/Avatars/Uploads/UserAvatars/@Model.UserInfo.UserId/@Model.UserInfo.AvatarName" />
+                        }
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row">@Html.DisplayNameFor(model => model.UserInfo.Login)</th>
+                    <td>@Html.DisplayFor(model => model.UserInfo.Login)</td>
+                </tr>
+                <tr>
+                    <th scope="row">@Html.DisplayNameFor(model => model.UserInfo.Email)</th>
+                    <td>@Html.DisplayFor(model => model.UserInfo.Email)</td>
+                </tr>
+                <tr>
+                    <th scope="row">@Html.DisplayNameFor(model => model.UserInfo.Role)</th>
+                    <td>@Html.DisplayFor(model => model.UserInfo.Role)</td>
+                </tr>
+                <tr>
+                    <th scope="row">@Html.DisplayNameFor(model => model.UserInfo.LinksCount)</th>
+                    <td>@Html.DisplayFor(model => model.UserInfo.LinksCount)</td>
+                </tr>
+            </tbody>
+        </table>
+        <h2 style="text-align:center">Список закладок</h2>
+        <table class="table table-striped userLinkList" align="center">
+            <thead>
+                <tr>
+                    <th scope="row">
+                        Закладка
+                    </th>
+                    <th scope="row">
+                        Категория
+                    </th>
+                    <th scope="row">
+                        Дата
+                    </th>
+                    <th scope="row">
+                        Кол-во лайков
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.AllUserLinks)
+                {
+                    <tr>
+                        <td>
+                            <a href="@item.LinkAddress" title="Перейти" target="_blank">
+                                @item.LinkName
+                            </a>
+                        </td>
+                        <td>@item.LinkCategory</td>
+                        <td>@item.CreatedAt</td>
+                        <td>@item.LikeCount</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <div style="text-align:center">
+        @Html.ActionLink("Назад", "Index", null, new { @class = "btn btn-primary" })
+    </div>
+</div>

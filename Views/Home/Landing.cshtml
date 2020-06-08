@@ -1,0 +1,329 @@
+﻿@*страница входа*@
+
+@model Checkitlink.Models.ViewModels.ProfileVM
+
+@{
+    ViewBag.Title = "Добро пожаловать!";
+}
+
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger">
+        @TempData["Error"]
+    </div>
+}
+
+@if (TempData["OK"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["OK"]
+    </div>
+}
+
+@if (TempData["Enter"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["Enter"]
+    </div>
+}
+
+<section id="lending-top-slide">
+    <div class="row" style="float:right">
+        <div class="col-lg-12 col-md-12 col-sm-12 top-buttons-landing">
+            <div id="reg">
+                <a href="#" id="reg-but" data-toggle="modal" data-target="#register">Зарегистрироваться сейчас</a>
+            </div>
+            <div id="login">
+                <a id="log-but" href="#" data-toggle="modal" data-target="#entrance">Войти</a>
+            </div>
+        </div>
+    </div>
+    <div id="logo">
+        <img src="~/Content/img/logo-main.png" style="margin-top: 75px; width: 86%;" />
+        <h1>Бесплатный сервис хранения ссылок и закладок!</h1>
+    </div>
+    <div class="conteryner">
+        <div id="public_link">
+            <a id="public_link_but" href="#" data-toggle="modal" data-target="#info">
+                <h2>Ознакомиться с CheckitLink</h2>
+            </a>
+        </div>
+        <div class="modal" id="info" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div id="modalWindow" class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close closeWindow" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h2 class="modal-title" id="myModalLabel" style="text-align:center">Про CheckitLink</h2>
+                    </div>
+                    <div class="modal-body col-lg-12 col-md-12 col-sm-12 aboutSite">
+                        <div class="col-lg-4 col-md-4 col-sm-4 aboutBlock">
+                            <h3>Свобода выбора категорий</h3>
+                            <p>
+                                В CheckitLink стандартные категории интересов подобраны таким образом,
+                                что Вы сразу найдёте подходящую категорию для сохранения Вашей ссылки.
+                                А возможность создавать собственные категории предоставляет
+                                Вам полную свободу в формировании категорий под Ваши ссылки
+                            </p>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-4 aboutBlock">
+                            <h3>Приватность</h3>
+                            <p>
+                                По умолчанию ваши ссылки и закладки имеют статус "Приватные". Их никто не видит,
+                                и они не появляются в общей ленте. Это удобно, если ваши закладки относятся к личным
+                                материалам
+                            </p>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-4 aboutBlock">
+                            <h3>Публичные закладки</h3>
+                            <p>
+                                Хотите поделится со всеми пользователями интересным материалом?
+                                Без проблем! Измените статус закладки на "Публичный", и тогда ее
+                                увидят абсолютно все
+                            </p>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-4 aboutBlock">
+                            <h3>Избранные страницы</h3>
+                            <p>
+                                Часто посещаете одни и те же сайты с фильмами, музыкой, обучающими материалами,
+                                развлекательные и новостные порталы? Добавьте их в избранное, и доступ к ним будет
+                                в один клик
+                            </p>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-4 aboutBlock">
+                            <h3>Социальность</h3>
+                            <p>
+                                Подписывайтесь на интересных Вам пользователей и просматривайте их
+                                публичные материалы
+                            </p>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-4 aboutBlock">
+                            <h3>Простота в использовании</h3>
+                            <p>
+                                Нашли интересный сериал, блог или информационный ресурс?
+                                Добавьте закладку в CheckitLink, присвойте категорию и нажмите "Добавить"!
+                            </p>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Закрыть</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12" style="text-align:center">
+                <div id="text-left-header" class="col-lg-6 col-md-6 col-sm-6">
+                    <p class="col-lg-6">
+                        Используйте закладки на любом рабочем месте,в любом браузере, операционной системе и устройстве
+                    </p>
+                </div>
+                <div id="text-rigth-header" class="col-lg-6 col-md-6 col-sm-6">
+                    <p class="col-lg-12">
+                        Мы позаботились о том, что бы Вы могли просматривать свои закладки дома, на работе, в транспорте, на отдыхе, с любого компьютера, телефона или планшета
+                    </p>
+                    <p class="col-lg-12">
+                        <img src="~/Content/img/OC.png" style="width:80%">
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @if (ViewBag.Enter == "Ошибка входа")
+    {
+        <div class="modal" id="entrance" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" style="display:block">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <a href="@Url.Action("Landing")" aria-label="Close" class = "btn close closeWindow">
+                            <span aria-hidden="true">&times;</span>
+                        </a>
+                        <h4 class="modal-title" id="myModalLabel" style="text-align:center">Добро пожаловать</h4>
+                    </div>
+                    @{
+                        ViewBag.Title = "Ошибка входа";
+                        Html.RenderPartial("_EnterPartial", Model);
+                    }
+                </div>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="modal" id="entrance" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="myModalLabel" style="text-align:center">Добро пожаловать</h4>
+                    </div>
+                    @{
+                        Html.RenderPartial("_EnterPartial", Model);
+                    }
+                </div>
+            </div>
+        </div>
+    }
+
+    @if (ViewBag.CreateAccountError == "Ошибка создания нового аккаунта")
+    {
+        <div class="modal" id="register" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" style="display:block;">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <a href="@Url.Action("Landing")" aria-label="Close" class="btn close closeWindow">
+                            <span aria-hidden="true">&times;</span>
+                        </a>
+                        <h4 class="modal-title" id="myModalLabel" style="text-align:center">Регистрация</h4>
+                    </div>
+                    @{ 
+                        ViewBag.Title = "Ошибка регистрации";
+                        Html.RenderPartial("_CreateAccountPartial", Model);
+                    }
+                </div>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="modal" id="register" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="myModalLabel" style="text-align:center">Регистрация</h4>
+                    </div>
+                    @{
+                        Html.RenderPartial("_CreateAccountPartial", Model);
+                    }
+                </div>
+            </div>
+        </div>
+    }
+</section>
+<section id="slide-02">
+    <div class="conteryner">
+        <h2 class="home">Используйте любые браузеры</h2>
+        <h3 align="center">
+            Ссылки доступны в любом браузере, в любой точке мира!
+        </h3>
+        <ul id="brow">
+            <li>
+                <img src="~/Content/img/cr.png">
+                <p>Google Chrome</p>
+            </li>
+            <li>
+                <img src="~/Content/img/YAndeks.png">
+                <p>Yandex Браузер</p>
+            </li>
+            <li>
+                <img src="~/Content/img/mozilla.png">
+                <p>Mozila Firefox</p>
+            </li>
+            <li>
+                <img src="~/Content/img/opera3.png">
+                <p>Opera</p>
+            </li>
+            <li>
+                <img src="~/Content/img/internet9.png">
+                <p>Internet Explorer</p>
+            </li>
+        </ul>
+        <h4 align="center">
+            и многие другие...
+        </h4>
+    </div>
+</section>
+<section class="home-slide">
+    <div class="row">
+        <div class="col-lg-12 col-md-12 col-sm-12">
+            <div class="img-slide-home col-lg-6 col-md-7 col-sm-12">
+                <img src="~/Content/img/slide-02.jpg" />
+            </div>
+            <div class="text-in-slide-home col-lg-6 col-md-5 col-sm-12">
+                <h3>Делится закладкой или нет - решать Вам!</h3>
+                <p>По умолчанию Ваши закладки никто не может смотреть, и они видны только Вам. Что бы ее могли посмотреть другие люди - поставьте статус "Публичный"</p>
+                <div style="text-align:center; width: 100%; display: flex;">
+                    <div class="linkStatusLanding">
+                        <img src="~/Content/img/link21.png">
+                        <p>Присвойте закладке статус "Публичная", что бы ее видели все!</p>
+                    </div>
+                    <div class="linkStatusLanding">
+                        <img src="~/Content/img/network1.png">
+                        <p>Присвойте статус "Приватная", что бы ее видели только Вы!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<section class="home-slide">
+    <div class="row">
+        <div class="col-lg-12 col-md-12 col-sm-12">
+            <div class="img-slide-home col-lg-6 col-md-7 col-sm-12">
+                <img src="~/Content/img/slide-03.jpg" />
+            </div>
+            <div class="text-in-slide-home col-lg-6 col-md-5 col-sm-12">
+                <h3>Порядок, и только порядок создает свободу!</h3>
+                <p>Создавайте любые категории, что бы упорядочить сохраненные ссылки.</p>
+                <div style="text-align:center; width: 100%; display: flex;">
+                    <div class="linkStatusLanding">
+                        <img src="~/Content/img/document39.png">
+                        <p>Создавайте, редактируйте и наполняйте любые категории, которые нужны именно ВАМ!</p>
+                    </div>
+                    <div class="linkStatusLanding">
+                        <img src="~/Content/img/documents1.png">
+                        <p>Большой выбор предложенных категорий и материала в разделе "Лента"</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<section class="home-slide">
+    <div class="row">
+        <div class="col-lg-12 col-md-12 col-sm-12">
+            <div class="img-slide-home col-lg-6 col-md-7 col-sm-12" style="height: 400px;">
+                <img src="~/Content/img/slide-04.jpg" style="height:inherit" />
+            </div>
+            <div class="text-in-slide-home col-lg-6 col-md-5 col-sm-12">
+                <h3>У нас закладки легко находятся и никогда не теряются!</h3>
+                <p>Мы ценим время наших пользователей, потому предусмотрели множество способов найти нужную закладку!</p>
+                <div style="text-align:center; width: 100%; display:flex">
+                    <div class="linkStatusLanding">
+                        <img src="~/Content/img/magnifier58.png">
+                        <p>Поиск по заголовку, описанию или хеш-тегу</p>
+                    </div>
+                    <div class="linkStatusLanding">
+                        <img src="~/Content/img/travel26.png">
+                        <p>Поиск ссылок по адресу сайта</p>
+                    </div>
+                </div>
+                <div class="linkStatusLanding">
+                    <img src="~/Content/img/filters.png">
+                    <p>Не помните адрес сайта, заголовка или описания? Мы предусмотрели фильтрацию по дате добавления!</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<section id="reg-slide">
+    <div class="conteryner">
+        <h2>Сохраняйте закладки прямо сейчас, ведь это очень просто и бесплатно!</h2>
+        <h4>
+            Простая регистрация, которая занимает не более минуты.
+        </h4>
+        <div id="form-home">
+            <a href="#" id="log-but_reg" data-toggle="modal" data-target="#register">
+                <h2>Зарегистрироваться сейчас!</h2>
+            </a>
+        </div>
+    </div>
+</section>
+
+@section Scripts
+{
+    <script src="~/Content/CheckitJS/CloseJS.js"></script>
+    <script src="~/Content/CheckitJS/CreateAccountJS.js"></script>
+    <script src="~/Content/CheckitJS/AddUserAvatarJS.js"></script>
+}

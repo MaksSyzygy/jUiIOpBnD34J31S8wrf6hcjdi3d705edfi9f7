@@ -1,0 +1,50 @@
+﻿@*детали профиля юзера*@
+
+@model Checkitlink.Models.ViewModels.UserVM
+
+@{
+    ViewBag.Title = "Мой профиль";
+}
+
+<h3 style="text-align:center">Профиль: @Model.Login</h3>
+
+<div class="container">
+    <div class="row">
+        <table class="table table-striped" style="width:60%" align="center">
+            <tbody>
+                <tr>
+                    <th scope="row">@Html.DisplayNameFor(model => model.AvatarName)</th>
+                    <td class="avatarUser">
+                        @if (Model.AvatarName == null)
+                        {
+                            <img src="~/Content/img/no-image.png" />
+                        }
+                        else
+                        {
+                            <img src="/Avatars/Uploads/UserAvatars/@Model.UserId/@Model.AvatarName" />
+                        }
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row">@Html.DisplayNameFor(model => model.Login)</th>
+                    <td>@Html.DisplayFor(model => model.Login)</td>
+                </tr>
+                <tr>
+                    <th scope="row">@Html.DisplayNameFor(model => model.Email)</th>
+                    <td>@Html.DisplayFor(model => model.Email)</td>
+                </tr>
+                <tr>
+                    <th scope="row">@Html.DisplayNameFor(model => model.LinksCount)</th>
+                    <td>@Html.DisplayFor(model => model.LinksCount)</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="row">
+        <div style="text-align: center;">
+            @Html.ActionLink("Редактировать профиль", "EditProfile", new { id = Model.UserId }, new { @class = "btn btn-primary" })
+            @Html.ActionLink("Редактор категорий", "EditMyCategory", new { id = Model.UserId }, new { @class = "btn btn-primary", style = "margin-right:10px; margin-left:10px;" })
+            @Html.ActionLink("Назад", "UserProfile", new { id = Model.UserId }, new { @class = "btn btn-success" })
+        </div>
+    </div>
+</div>

@@ -1,0 +1,77 @@
+﻿@model IEnumerable<Checkitlink.Models.ViewModels.UserVM>
+
+@using PagedList.Mvc;
+@using PagedList;
+
+@{
+    ViewBag.Title = "Выбор админа";
+}
+
+@if (TempData["OK"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["OK"]
+    </div>
+}
+
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger">
+        @TempData["Error"]
+    </div>
+}
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Login)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Email)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.LinksCount)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Role)
+        </th>
+        <th>
+            Действия
+        </th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Login)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Email)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LinksCount)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Role)
+            </td>
+            <td>
+                @if (item.Role == "Админ")
+                {
+                    @Html.ActionLink("Снять", "ChoiceAdmin", new { id = item.UserId }, new { @class = "btn btn-danger" })
+                }
+                else
+                {
+                    @Html.ActionLink("Назначить", "ChoiceAdmin", new { id = item.UserId }, new { @class = "btn btn-success" })
+                }
+            </td>
+        </tr>
+    }
+
+</table>
+
+<div style="text-align:center">
+    @Html.ActionLink("Назад", "Index", "User", new { @class = "btn btn-primary"})
+</div>
+
+@Html.PagedListPager((IPagedList)ViewBag.usersOnPage, page => Url.Action("AssignAdminUser", new { page }))

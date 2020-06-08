@@ -1,0 +1,81 @@
+﻿@*редактирование профиля*@
+
+@model Checkitlink.Models.ViewModels.UserProfileVM
+
+@{
+    ViewBag.Title = "Редактировать данные";
+}
+
+@using (Html.BeginForm("EditProfile", "Home", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    @Html.HiddenFor(model => model.UserId)
+
+    <div class="container">
+        <div class="row">
+            <table class="table table-striped" style="width:60%" align="center">
+                <tbody>
+                    <tr>
+                        <th scope="row">
+                            @Html.LabelFor(model => model.Login)
+                        </th>
+                        <td>
+                            @Html.EditorFor(model => model.Login, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessage("loginmatch", new { @class = "text-danger" })
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row">
+                            @Html.LabelFor(model => model.Email)
+                        </th>
+                        <td>
+                            @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessage("emailmatch", new { @class = "text-danger" })
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row">
+                            @Html.LabelFor(model => model.AvatarName)
+                        </th>
+                        <td class="avatarUser" style="text-align:center">
+                            @Html.EditorFor(model => model.AvatarName, new { htmlAttributes = new { @class = "form-control" } })
+
+                            @if (Model.AvatarName != null)
+                            {
+                                <img id="imgPreview" src="/Avatars/Uploads/UserAvatars/@Model.UserId/@Model.AvatarName" />
+                            }
+                            else
+                            {
+                                <img id="imgPreview" src="~/Content/img/no-image.png" />
+                            }
+                            <br />
+                            <br />
+
+                            <div class="buttonImage">
+                                <input class="inputImage" type="file" , name="file" id="imageUpload" /><!--для загрузки файла картинки-->
+                                <label for="imageUpload">Выбрать аватар</label>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row">
+                            Действия
+                        </th>
+                        <td class="editButtons" style="text-align:center">
+                            <input type="submit" value="Сохранить" class="btn btn-success" style="margin-right:10px;" />
+                            @Html.ActionLink("Изменить пароль", "EditPassword", new { id = Model.UserId }, new { @class = "btn btn-info", style = "margin-right:10px;" })
+                            @Html.ActionLink("Назад", "UserProfile", "", new { @class = "btn btn-info" })
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+}
+
+@section Scripts
+{
+    <script src="~/Content/CheckitJS/AddUserAvatarJS.js"></script>
+}

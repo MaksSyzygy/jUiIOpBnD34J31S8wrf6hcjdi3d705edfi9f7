@@ -1,0 +1,244 @@
+﻿@*частичное представление для страниц Личный кабинет, Избранные закладки, Общая лента публичных закладок*@
+
+@model Checkitlink.Models.ViewModels.ProfileVM
+
+@if (TempData["OK"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["OK"]
+    </div>
+}
+
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger">
+        @TempData["Error"]
+    </div>
+}
+
+@foreach (var item in Model.LinkListUserProfile)
+{
+    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3 link-item linkCard">
+        <div class="thumbnail">
+            <div class="row" style="height: 363.5px;">
+                <div class="cardImgBlock col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                    @if (item.LinkPicture == null)
+                    {
+                        <img class="imgCardLink" data-toggle="modal" data-target="#@item.LinkID" title="Подробнее..." src="~/Content/img/without-screenshot.png">
+                    }
+                    else
+                    {
+                        string linkId = @item.LinkPicture;
+                        <img class="imgCardLink" data-toggle="modal" data-target="#@item.LinkID" title="Подробнее..." src="/Screenshots/Uploads/LinkAvatars/@item.LinkPicture.Substring(0, linkId.IndexOf('.'))/@item.LinkPicture">
+                    }
+                </div>
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                    <h5>
+                        @if (item.LinkName.Length > 50)
+                        {
+                            <span data-toggle="modal" data-target="#@item.LinkID" title="@item.LinkName">
+                                @item.LinkName.Substring(0, 50).Insert(50, "...")
+                            </span>
+                        }
+                        else
+                        {
+                            <span data-toggle="modal" data-target="#@item.LinkID" title="@item.LinkName">
+                                @item.LinkName
+                            </span>
+                        }
+                    </h5>
+                    @if (ViewBag.Title == "Общая лента публичных закладок")
+                    {
+                        <div class="btn-toolbar">
+                            <div class="btn-group link-actions" role="group">
+                                @using (Ajax.BeginForm("SaveOtherUserLink", "Home", new AjaxOptions { UpdateTargetId = "list", InsertionMode = InsertionMode.Replace }))
+                                {
+                                    if (Model.MyLinks.Any(x => x.LinkPicture == item.LinkPicture))
+                                    {
+                                        <input type="hidden" name="title" value="@ViewBag.Title" />
+                                        <button class="savedLink linkPanelButton btn btn-default btn-link-favourite" title="Сохранено">
+                                            <span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span>
+                                        </button>
+                                    }
+                                    else
+                                    {
+                                        <input type="hidden" name="title" value="@ViewBag.Title" />
+                                        <button name="linkId" value="@item.LinkID" class="linkPanelButton btn btn-default btn-link-favourite" title="Сохранить себе">
+                                            <span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span>
+                                        </button>
+                                    }
+                                }
+                            </div>
+                            @using (Ajax.BeginForm("AddLike", "Home", new AjaxOptions { UpdateTargetId = string.Format("rating_{0}", item.LinkID), InsertionMode = InsertionMode.Replace }))
+                            {
+                                <div class="btn-group like-buttons" role="group">
+                                    @Html.Hidden("linkId", item.LinkID)
+                                    <button name="button" value="RatingUp" class="likeButton btn btn-default" title="Закладка интересная!">
+                                        <span class="likeImg">
+                                            <img src="~/Content/img/like.png" />
+                                        </span>
+                                    </button>
+                                    <div class="likeCounter">
+                                        <span id="rating_@item.LinkID" class="likeCount">
+                                            @item.LikeCount
+                                        </span>
+                                    </div>
+                                    <button name="button" value="RatingDown" class="likeButton btn btn-default" title="Не интересная закладка...">
+                                        <span class="likeImg">
+                                            <img src="~/Content/img/dislike.png" />
+                                        </span>
+                                    </button>
+                                </div>
+                            }
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="btn-toolbar">
+                            <div class="btn-group link-actions" role="group">
+                                @using (Ajax.BeginForm("AddFavorite", "Home", new AjaxOptions { UpdateTargetId = "list", InsertionMode = InsertionMode.Replace }))
+                                {
+                                    if (item.FavoriteStatus == true)
+                                    {
+                                        <input type="hidden" name="title" value="@ViewBag.Title" />
+                                        <input type="hidden" name="linkId" value="@item.LinkID" />
+                                        <button name="favourite" value="@item.FavoriteStatus.ToString()" class="favouriteLink linkPanelButton btn btn-default btn-link-favourite" title="Убрать из избранного">
+                                            <span class="fa fa-star" aria-hidden="true"></span>
+                                        </button>
+                                    }
+                                    else
+                                    {
+                                        <input type="hidden" name="title" value="@ViewBag.Title" />
+                                        <input type="hidden" name="linkId" value="@item.LinkID" />
+                                        <button name="favourite" value="@item.FavoriteStatus.ToString()" class="linkPanelButton btn btn-default btn-link-favourite" title="Добавить в избранное">
+                                            <span class="fa fa-star" aria-hidden="true"></span>
+                                        </button>
+                                    }
+                                }
+                                @using (Ajax.BeginForm("PrivateLink", "Home", new AjaxOptions { UpdateTargetId = "list", InsertionMode = InsertionMode.Replace }))
+                                {
+                                    if (item.PublicStatus == true)
+                                    {
+                                        <input type="hidden" name="title" value="@ViewBag.Title" />
+                                        <input type="hidden" name="linkId" value="@item.LinkID" />
+                                        <button name="status" value="@item.PublicStatus.ToString()" class="publicLink linkPanelButton btn btn-default btn-link-private" title="Эта закладка в общем доступе">
+                                            <span class="fa fa-eye" aria-hidden="true"></span>
+                                        </button>
+                                    }
+                                    else
+                                    {
+                                        <input type="hidden" name="title" value="@ViewBag.Title" />
+                                        <input type="hidden" name="linkId" value="@item.LinkID" />
+                                        <button name="status" value="@item.PublicStatus.ToString()" class="linkPanelButton btn btn-default btn-link-private" title="Эта закладка скрыта из общего доступа">
+                                            <span class="fa fa-eye" aria-hidden="true"></span>
+                                        </button>
+                                    }
+                                }
+                                <a href="@Url.Action("EditLink", "Home", new { id = item.LinkID } )" class="linkPanelButton btn btn-default btn-link-edit" data-toggle="modal" data-target="#editLink_@item.LinkID" title="Редактировать закладку">
+                                    <i class="fa fa-pencil"></i>
+                                </a>
+                                <a href="@Url.Action("DeleteLink", "Home", new { id = item.LinkID })" class="delete linkPanelButton btn btn-default btn-link-remove" title="Удаление закладки">
+                                    <span class="fa fa-times" aria-hidden="true"></span>
+                                </a>
+                            </div>
+                            @using (Ajax.BeginForm("AddLike", "Home", new AjaxOptions { UpdateTargetId = string.Format("rating_{0}", item.LinkID), InsertionMode = InsertionMode.Replace }))
+                            {
+                                <div class="btn-group like-buttons" role="group">
+                                    @Html.Hidden("linkId", item.LinkID)
+                                    <button name="button" value="RatingUp" class="likeButton btn btn-default" title="Закладка интересная!">
+                                        <span class="likeImg">
+                                            <img src="~/Content/img/like.png" />
+                                        </span>
+                                    </button>
+                                    <div class="likeCounter">
+                                        <span id="rating_@item.LinkID" class="likeCount">
+                                            @item.LikeCount
+                                        </span>
+                                    </div>
+                                    <button name="button" value="RatingDown" class="likeButton btn btn-default" title="Не интересная закладка...">
+                                        <span class="likeImg">
+                                            <img src="~/Content/img/dislike.png" />
+                                        </span>
+                                    </button>
+                                </div>
+                            }
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal" id="@item.LinkID" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="row" style="padding-left: 20px;padding-right: 20px;">
+                    <div class="modal-header col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="myModalLabel">
+                            <a href="@item.LinkAddress" style="text-decoration:none" target="_blank">
+                                @item.LinkName
+                            </a>
+                        </h4>
+                    </div>
+                    <div class="modal-body linkBodyModal col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                        <div class="cardModalImgBlock col-xs-8 col-sm-8 col-md-8 col-lg-8">
+                            @if (item.LinkPicture == null)
+                            {
+                                <a href="@item.LinkAddress" title="Перейти" target="_blank">
+                                    <img src="~/Content/img/without-screenshot.png">
+                                </a>
+                            }
+                            else
+                            {
+                                string linkId = @item.LinkPicture;
+                                <a href="@item.LinkAddress" title="Перейти" target="_blank">
+                                    <img src="/Screenshots/Uploads/LinkAvatars/@item.LinkPicture.Substring(0, linkId.IndexOf('.'))/@item.LinkPicture">
+                                </a>
+                            }
+                        </div>
+                        <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                            <p>Автор: @item.UserAuthor</p>
+                            <p>
+                                Категория:
+                                <br />@item.LinkCategory
+                            </p>
+                            <p>
+                                Дата:
+                                <br />@item.CreatedAt
+                            </p>
+                        </div>
+                    </div>
+                    <div class="modal-body linkBodyModal col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                        @if (item.LinkDescription == null)
+                        {
+                            <p></p>
+                        }
+                        else
+                        {
+                            <p>
+                                @item.LinkDescription
+                            </p>
+                        }
+                    </div>
+                    <div class="modal-footer col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                        <a href="@item.LinkAddress" target="_blank" type="button" class="btn btn-success">Перейти по ссылке</a>
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Закрыть</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal editLinkWindow" id="editLink_@item.LinkID" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Редактировать</h4>
+                </div>
+                @{
+                    Html.RenderPartial("_EditLinkPartial", Model);
+                }
+            </div>
+        </div>
+    </div>
+}

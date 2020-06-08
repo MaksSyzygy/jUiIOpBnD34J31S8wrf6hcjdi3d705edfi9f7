@@ -1,0 +1,101 @@
+﻿<!DOCTYPE html>
+<html>
+@{
+    AjaxOptions SearchLinks = new AjaxOptions()
+    {
+        UpdateTargetId = "list",
+        Url = Url.Action("SearchLink", "Home")
+    };
+}
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+</head>
+<body>
+    @if (Request.IsAuthenticated)
+    {
+        <nav class="navbar navbar-default navbar-main">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="/">
+                        <img src="~/Content/img/logo.png" alt="Checkitlink">
+                    </a>
+                </div>
+                <div id="navbar" class="navbar-collapse collapse">
+
+                    @Html.Action("LoginPartial", "Home", new { area = "" })
+
+                    <div class="navbar-form navbar-right">
+                        <div class="search-wrapper">
+                            @if (ViewBag.Title == "Личный кабинет" || ViewBag.Title == "Избранные закладки" || ViewBag.Title == "Общая лента публичных закладок")
+                            {
+                                using (Ajax.BeginForm(SearchLinks))
+                                {
+                                    <input type="hidden" name="title" value="@ViewBag.Title" />
+                                    <input type="text" name="filter" class="search-form form-search-input" placeholder="Поиск...">
+                                    <button class="btn btn-default form-control" type="submit" style="background-color: white;" title="Найти">
+                                        <span class="fa fa-search" aria-hidden="true"></span>
+                                    </button>
+                                }
+                            }
+                        </div>
+                    </div>
+
+                    <div class="navbar-form navbar-right">
+                        <div class="btn-group ">
+                            <button type="button" class="btn btn-circle btn-info btn-outline btn-add" data-toggle="modal" data-target="#addLink">
+                                <i class="fa fa-plus"></i>
+                                Новая закладка
+                            </button>
+                        </div>
+                    </div>
+                    <!-- ICONS -->
+                    <div class="btn-toolbar">
+                        <div class="menuButtons">
+                            @if (Request.IsAuthenticated && User.IsInRole("Админ"))
+                            {
+                                @Html.ActionLink("Админка", "Index", "User", new { area = "Admin" }, new { @style = "text-decoration: none;", target = "_blank", @class = "btn btn-default" })
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nav>
+        <div class="container-fluid body-content">
+            @RenderBody()
+            <hr />
+            <footer>
+                <p>&copy; @DateTime.Now.Year – ChekitLink.com</p>
+            </footer>
+        </div>
+
+        @Scripts.Render("~/bundles/bower-jquery")
+        @Scripts.Render("~/bundles/jqueryui")
+        @Scripts.Render("~/bundles/bower-bootsrap-js")
+        @Scripts.Render("~/bundles/jqueryval")
+        @Scripts.Render("~/bundles/ajax")
+        @RenderSection("scripts", required: false)
+    }
+    else
+    {
+        @RenderBody()
+
+        @Scripts.Render("~/bundles/bower-jquery")
+        @Scripts.Render("~/bundles/jqueryui")
+        @Scripts.Render("~/bundles/bower-bootsrap-js")
+        @Scripts.Render("~/bundles/jqueryval")
+        @Scripts.Render("~/bundles/ajax")
+        @RenderSection("scripts", required: false)
+    }
+</body>
+</html>
