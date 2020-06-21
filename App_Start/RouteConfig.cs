@@ -15,7 +15,7 @@ namespace Checkitlink
 
             routes.MapRoute("User", "User/{action}/{name}", new { controller = "User", action = "Index", name = UrlParameter.Optional }, new[] { "Checkitlink.Controllers" });
 
-            routes.MapRoute("Default", "", new { controller = "Home", action = "Index" }, new[] { "BankApplication.Controllers" });
+            routes.MapRoute("Default", "", new { controller = "Home", action = "Index" }, new[] { "Checkitlink.Controllers" });
         }
     }
 }
